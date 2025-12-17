@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FANATICAL 2026 | Build Your Business Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        .step { display: none; animation: fadeIn 0.5s ease; }
+        .step.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .ceo-line {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            border-left: 4px solid #00d4aa;
+        }
+        
+        .ceo-reminder {
+            background: linear-gradient(90deg, rgba(0,212,170,0.1) 0%, transparent 100%);
+            border-left: 3px solid #00d4aa;
+        }
+        
+        .progress-fill {
+            transition: width 0.5s ease;
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: scale(1.01);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .number-display {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s infinite;
+        }
+        
+        .celebration {
+            animation: celebrate 0.6s ease;
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f0f 100%);
+            min-height: 100vh;
+        }
+        
+        .logo-mark {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        
+        .step-badge {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .accent-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #00d4aa 0%, #00b894 50%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="logo-mark text-white mb-2">FANATICAL</div>
+            <div class="accent-bar w-24 mx-auto mb-4"></div>
+            <p class="text-gray-400 text-sm tracking-wide">2026 BUSINESS BUILDER</p>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between text-sm text-gray-500 mb-2">
+                <span class="step-badge">Your Progress</span>
+                <span id="progress-text" class="step-badge">Step 1 of 10</span>
+            </div>
+            <div class="h-1 bg-gray-800 rounded-full overflow-hidden">
+                <div id="progress-bar" class="progress-fill h-full bg-gradient-to-r from-teal-400 to-emerald-500 rounded-full" style="width: 10%"></div>
+            </div>
+        </div>
+        
+        <!-- Form Container -->
+        <form id="fanatical-form">
+            
+            <!-- Step 1: Welcome -->
+            <div class="step active" data-step="1">
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Let's Begin</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Build Your 2026 Operating Plan</h2>
+                        <p class="text-gray-600 mt-2">10 minutes. One system. Total clarity.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your name</label>
+                            <input type="text" name="name" required placeholder="Full name" 
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="email" required placeholder="you@email.com" 
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone <span class="text-gray-400">(optional)</span></label>
+                            <input type="tel" name="phone" placeholder="555-123-4567" 
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 2: Opening Reflection -->
+            <div class="step" data-step="2">
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"2026 doesn't care about your intention. It responds to your actions."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Reflection</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Start With the End</h2>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            If 2026 felt calm, successful, and intentional — what would be different?
+                        </label>
+                        <textarea name="opening_reflection" rows="4" required
+                            placeholder="No pressure. No perfection. Just direction."
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 3: Who I Serve -->
+            <div class="step" data-step="3">
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"Clarity feels boring at first — because chaos is loud."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Focus</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Who Do You Serve?</h2>
+                        <p class="text-gray-600 mt-2">Not everyone you can help. Who do you want more of?</p>
+                    </div>
+                    
+                    <div>
+                        <textarea name="who_i_serve" rows="3" required
+                            placeholder="Example: First-time homebuyers in Northern Colorado who feel overwhelmed by the process..."
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                        <p class="text-sm text-gray-500 mt-2">Who energizes you? Who do you get the best results for?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 4: What Decision -->
+            <div class="step" data-step="4">
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Clarity</p>
+                        <h2 class="text-2xl font-bold text-gray-900">What Decision Do You Help Them Make?</h2>
+                        <p class="text-gray-600 mt-2">Not "buy or sell" — what's the real decision?</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <button type="button" onclick="selectDecision(this, 'Stop renting, start building equity')" 
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Stop renting, start building equity
+                        </button>
+                        <button type="button" onclick="selectDecision(this, 'Relocate for a new chapter')"
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Relocate for a new chapter
+                        </button>
+                        <button type="button" onclick="selectDecision(this, 'Downsize and simplify')"
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Downsize and simplify
+                        </button>
+                        <button type="button" onclick="selectDecision(this, 'Move closer to family')"
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Move closer to family
+                        </button>
+                        <button type="button" onclick="selectDecision(this, 'Invest in their future')"
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Invest in their future
+                        </button>
+                        <button type="button" onclick="selectDecision(this, 'Other')"
+                            class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
+                            Other (write below)
+                        </button>
+                    </div>
+                    
+                    <textarea name="what_decision" rows="2" required
+                        placeholder="Or write your own..."
+                        class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                </div>
+            </div>
+            
+            <!-- Step 5: Who I'm NOT For -->
+            <div class="step" data-step="5">
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Boundaries</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Who Are You NOT For?</h2>
+                        <p class="text-gray-600 mt-2">This is relief, not rejection.</p>
+                    </div>
+                    
+                    <div>
+                        <textarea name="who_not_for" rows="3" required
+                            placeholder="Example: Investors looking for quick flips, people who want to be pressured into decisions..."
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                        <p class="text-sm text-gray-500 mt-2">Saying no to some means saying yes to the right ones.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 6: The Math -->
+            <div class="step" data-step="6">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"Emotion lies. Math tells the truth."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">The Math</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Find Your Calm Number</h2>
+                        <p class="text-gray-600 mt-2">The number that makes everything else predictable</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">2026 Income Goal</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-gray-500 text-lg">$</span>
+                                <input type="number" name="income_goal" id="income_goal" required placeholder="150,000"
+                                    onchange="calculateNumbers()" oninput="calculateNumbers()"
+                                    class="input-field w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Average Commission Per Deal</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-gray-500 text-lg">$</span>
+                                <input type="number" name="avg_commission" id="avg_commission" required placeholder="7,500"
+                                    onchange="calculateNumbers()" oninput="calculateNumbers()"
+                                    class="input-field w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 pt-4">
+                            <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+                                <p class="text-xs text-gray-500 uppercase tracking-wide">Deals Needed</p>
+                                <p id="deals_needed" class="text-3xl font-bold text-gray-800 mt-1">—</p>
+                                <input type="hidden" name="deals_needed" id="deals_needed_input">
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+                                <p class="text-xs text-gray-500 uppercase tracking-wide">Appointments</p>
+                                <p id="appointments_needed" class="text-3xl font-bold text-gray-800 mt-1">—</p>
+                                <input type="hidden" name="appointments_needed" id="appointments_needed_input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 7: Your Number -->
+            <div class="step" data-step="7">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"If you don't know your number, you're working on vibes."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center">
+                        <p class="step-badge text-teal-600 mb-4">Your Number</p>
+                        <h2 class="text-xl font-bold text-gray-900 mb-2">Your Weekly Conversation Number</h2>
+                        <p class="text-gray-600 mb-6">Your job is not closings. Your job is this:</p>
+                        
+                        <div class="number-display" id="weekly_number_display">—</div>
+                        <p class="text-lg text-gray-600 mt-2">conversations per week</p>
+                        <input type="hidden" name="weekly_conversation_number" id="weekly_number_input">
+                        
+                        <div class="mt-8 bg-teal-50 rounded-xl p-5 border border-teal-100">
+                            <p class="text-teal-800">If you hit this number consistently,<br><strong>closings become predictable instead of stressful.</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 8: Weekly Standards -->
+            <div class="step" data-step="8">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"Goals don't build businesses. Standards do."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Standards</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Your Weekly Standards</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">How will you stay visible?</label>
+                            <textarea name="visibility_commitment" rows="2" required
+                                placeholder="Example: Post 3x per week, host monthly buyer workshop..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">CEO Hour Day</label>
+                                <select name="ceo_hour_day" required
+                                    class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg bg-white">
+                                    <option value="">Select...</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">CEO Hour Time</label>
+                                <input type="time" name="ceo_hour_time" required
+                                    class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
+                            </div>
+                        </div>
+                        
+                        <p class="text-sm text-gray-500 text-center pt-2">If it's not scheduled, it doesn't exist.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 9: Brand DNA -->
+            <div class="step" data-step="9">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"People trust clarity more than charisma."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Brand DNA — Version One</p>
+                        <h2 class="text-2xl font-bold text-gray-900">How People Feel When You Speak</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">My voice feels like...</label>
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                <button type="button" onclick="toggleVoice(this, 'Calm')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Calm</button>
+                                <button type="button" onclick="toggleVoice(this, 'Warm')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Warm</button>
+                                <button type="button" onclick="toggleVoice(this, 'Direct')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Direct</button>
+                                <button type="button" onclick="toggleVoice(this, 'Encouraging')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Encouraging</button>
+                                <button type="button" onclick="toggleVoice(this, 'Knowledgeable')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Knowledgeable</button>
+                                <button type="button" onclick="toggleVoice(this, 'Straightforward')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Straightforward</button>
+                            </div>
+                            <input type="text" name="voice_feels_like" id="voice_input" placeholder="Or type your own..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Clients feel...</label>
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                <button type="button" onclick="toggleFeel(this, 'Confident')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Confident</button>
+                                <button type="button" onclick="toggleFeel(this, 'Supported')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Supported</button>
+                                <button type="button" onclick="toggleFeel(this, 'Informed')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Informed</button>
+                                <button type="button" onclick="toggleFeel(this, 'Relieved')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Relieved</button>
+                                <button type="button" onclick="toggleFeel(this, 'Empowered')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Empowered</button>
+                                <button type="button" onclick="toggleFeel(this, 'Not Pressured')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Not Pressured</button>
+                            </div>
+                            <input type="text" name="clients_feel" id="feel_input" placeholder="Or type your own..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                        </div>
+                        
+                        <div class="pt-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Brand DNA Statement</label>
+                            <textarea name="brand_dna_statement" id="brand_dna" rows="3" required
+                                placeholder="I help [who] decide [what] with a voice that feels [how] so clients feel [outcome]"
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                            <p class="text-sm text-gray-500 mt-2">This is Version One. It will evolve as you do.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 10: Commitment -->
+            <div class="step" data-step="10">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Lock It In</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Your 30-Day Focus</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                What ONE thing are you focusing on for the next 30 days?
+                            </label>
+                            <textarea name="thirty_day_focus" rows="3" required
+                                placeholder="Example: Master my listing presentation, build my database, launch my first buyer workshop..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" name="ignore_distractions" value="yes" required
+                                    class="mt-1 w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                                <span class="text-gray-700">
+                                    <strong>For the next 30 days, I will ignore new ideas unless they support this focus.</strong>
+                                    <span class="block text-sm text-gray-500 mt-1">This is a commitment, not a suggestion.</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-gray-900 rounded-xl p-6 text-center">
+                        <p class="text-white">"We don't build this business by being louder.<br>We build it by being disciplined."</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Success Screen -->
+            <div class="step" data-step="11">
+                <div class="card rounded-2xl shadow-2xl p-8 text-center celebration">
+                    <div class="mb-4">
+                        <div class="w-16 h-16 bg-teal-500 rounded-full mx-auto flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">You're Locked In</h2>
+                    <p class="text-gray-600 mb-6">Your 2026 Operating Plan is saved.</p>
+                    
+                    <div class="bg-gray-900 rounded-xl p-6 mb-6">
+                        <p class="text-gray-400 text-sm uppercase tracking-wide">Your Calm Number</p>
+                        <p class="text-5xl font-bold text-teal-400 my-2" id="final_number">—</p>
+                        <p class="text-gray-400">conversations per week</p>
+                    </div>
+                    
+                    <div class="space-y-2 text-left bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
+                        <p class="font-medium text-gray-800 text-sm uppercase tracking-wide mb-3">Your Commitments</p>
+                        <p class="text-gray-700">CEO Hour: <span id="final_ceo_hour" class="font-medium">—</span></p>
+                        <p class="text-gray-700">30-Day Focus: <span id="final_focus" class="font-medium">—</span></p>
+                    </div>
+                    
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+                        <p class="text-amber-800 font-medium">Screenshot this page.</p>
+                        <p class="text-amber-700 text-sm">This is your operating plan — not motivation.</p>
+                    </div>
+                    
+                    <div class="ceo-line rounded-xl p-4">
+                        <p class="text-white">"2026 doesn't care about your intention.<br>It responds to your actions."</p>
+                    </div>
+                    
+                    <p class="text-gray-400 mt-6 text-sm">Your Brand DNA is saved and will power your content.</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between mt-8" id="nav-buttons">
+                <button type="button" id="prev-btn" onclick="prevStep()" 
+                    class="px-6 py-3 bg-gray-800 text-white rounded-xl font-medium hover:bg-gray-700 transition hidden">
+                    ← Back
+                </button>
+                <button type="button" id="next-btn" onclick="nextStep()" 
+                    class="btn-primary px-8 py-3 text-white rounded-xl font-medium ml-auto">
+                    Continue →
+                </button>
+                <button type="submit" id="submit-btn" 
+                    class="btn-primary px-8 py-3 text-white rounded-xl font-medium ml-auto hidden">
+                    Submit My Plan →
+                </button>
+            </div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="text-center mt-12 text-gray-600 text-sm">
+            <p>The Bold Collective</p>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 10;
+        
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `Step ${Math.min(currentStep, totalSteps)} of ${totalSteps}`;
+        }
+        
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            
+            // Show/hide nav buttons
+            document.getElementById('prev-btn').classList.toggle('hidden', step === 1);
+            document.getElementById('next-btn').classList.toggle('hidden', step === 10 || step === 11);
+            document.getElementById('submit-btn').classList.toggle('hidden', step !== 10);
+            document.getElementById('nav-buttons').classList.toggle('hidden', step === 11);
+            
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function nextStep() {
+            if (currentStep < 11) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function calculateNumbers() {
+            const income = parseFloat(document.getElementById('income_goal').value) || 0;
+            const commission = parseFloat(document.getElementById('avg_commission').value) || 0;
+            
+            if (income && commission) {
+                const deals = Math.ceil(income / commission);
+                const appointments = deals * 3;
+                const weekly = Math.ceil((appointments / 52) * 7);
+                
+                document.getElementById('deals_needed').textContent = deals;
+                document.getElementById('appointments_needed').textContent = appointments;
+                document.getElementById('weekly_number_display').textContent = weekly;
+                document.getElementById('final_number').textContent = weekly;
+                
+                document.getElementById('deals_needed_input').value = deals;
+                document.getElementById('appointments_needed_input').value = appointments;
+                document.getElementById('weekly_number_input').value = weekly;
+            }
+        }
+        
+        function selectDecision(btn, value) {
+            document.querySelectorAll('.decision-btn').forEach(b => {
+                b.classList.remove('border-teal-500', 'bg-teal-50');
+            });
+            btn.classList.add('border-teal-500', 'bg-teal-50');
+            document.querySelector('[name="what_decision"]').value = value;
+        }
+        
+        let selectedVoices = [];
+        function toggleVoice(btn, value) {
+            btn.classList.toggle('border-teal-500');
+            btn.classList.toggle('bg-teal-50');
+            
+            if (selectedVoices.includes(value)) {
+                selectedVoices = selectedVoices.filter(v => v !== value);
+            } else {
+                selectedVoices.push(value);
+            }
+            document.getElementById('voice_input').value = selectedVoices.join(', ');
+        }
+        
+        let selectedFeels = [];
+        function toggleFeel(btn, value) {
+            btn.classList.toggle('border-teal-500');
+            btn.classList.toggle('bg-teal-50');
+            
+            if (selectedFeels.includes(value)) {
+                selectedFeels = selectedFeels.filter(v => v !== value);
+            } else {
+                selectedFeels.push(value);
+            }
+            document.getElementById('feel_input').value = selectedFeels.join(', ');
+        }
+        
+        // Form submission
+        document.getElementById('fanatical-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Update final screen
+            document.getElementById('final_ceo_hour').textContent = 
+                `${data.ceo_hour_day}s at ${data.ceo_hour_time}`;
+            document.getElementById('final_focus').textContent = data.thirty_day_focus;
+            
+            // Show success
+            currentStep = 11;
+            showStep(11);
+            
+            // TODO: Send to Airtable via webhook or API
+            console.log('Form data:', data);
+        });
+    </script>
+</body>
+</html>
