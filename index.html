@@ -45,6 +45,11 @@
             box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.2);
         }
         
+        .input-field.error {
+            border-color: #f87171 !important;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+        }
+        
         .btn-primary {
             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
             transition: all 0.3s ease;
@@ -104,6 +109,41 @@
             height: 4px;
             background: linear-gradient(90deg, #00d4aa 0%, #00b894 50%, transparent 100%);
         }
+        
+        .copy-box {
+            background: #1a1a2e;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+        
+        .copy-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .copy-btn.copied {
+            background: #10b981 !important;
+        }
+        
+        .helper-text {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        .error-shake {
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
     </style>
 </head>
 <body class="min-h-screen py-8 px-4">
@@ -150,11 +190,6 @@
                             <input type="email" name="email" required placeholder="you@email.com" 
                                 class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone <span class="text-gray-400">(optional)</span></label>
-                            <input type="tel" name="phone" placeholder="555-123-4567" 
-                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -178,6 +213,7 @@
                         <textarea name="opening_reflection" rows="4" required
                             placeholder="No pressure. No perfection. Just direction."
                             class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                        <p class="helper-text mt-2">Write freely. This is for you, not for a test.</p>
                     </div>
                 </div>
             </div>
@@ -199,7 +235,7 @@
                         <textarea name="who_i_serve" rows="3" required
                             placeholder="Example: First-time homebuyers in Northern Colorado who feel overwhelmed by the process..."
                             class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
-                        <p class="text-sm text-gray-500 mt-2">Who energizes you? Who do you get the best results for?</p>
+                        <p class="helper-text mt-2">Specific beats impressive. One clear sentence is enough.</p>
                     </div>
                 </div>
             </div>
@@ -214,7 +250,7 @@
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3 mb-4">
-                        <button type="button" onclick="selectDecision(this, 'Stop renting, start building equity')" 
+                        <button type="button" onclick="selectDecision(this, 'Stop renting and start building equity')" 
                             class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
                             Stop renting, start building equity
                         </button>
@@ -234,7 +270,7 @@
                             class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
                             Invest in their future
                         </button>
-                        <button type="button" onclick="selectDecision(this, 'Other')"
+                        <button type="button" onclick="selectDecision(this, '')"
                             class="decision-btn p-3 border-2 border-gray-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-sm text-left">
                             Other (write below)
                         </button>
@@ -259,7 +295,7 @@
                         <textarea name="who_not_for" rows="3" required
                             placeholder="Example: Investors looking for quick flips, people who want to be pressured into decisions..."
                             class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
-                        <p class="text-sm text-gray-500 mt-2">Saying no to some means saying yes to the right ones.</p>
+                        <p class="helper-text mt-2">Saying no to some means saying yes to the right ones.</p>
                     </div>
                 </div>
             </div>
@@ -286,8 +322,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">2026 Income Goal</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-3 text-gray-500 text-lg">$</span>
-                                <input type="number" name="income_goal" id="income_goal" required placeholder="150,000"
-                                    onchange="calculateNumbers()" oninput="calculateNumbers()"
+                                <input type="number" name="income_goal" id="income_goal" required placeholder="150000"
                                     class="input-field w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
                             </div>
                         </div>
@@ -296,10 +331,20 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Average Commission Per Deal</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-3 text-gray-500 text-lg">$</span>
-                                <input type="number" name="avg_commission" id="avg_commission" required placeholder="7,500"
-                                    onchange="calculateNumbers()" oninput="calculateNumbers()"
+                                <input type="number" name="avg_commission" id="avg_commission" required placeholder="7500"
                                     class="input-field w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg">
                             </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Appointments to close 1 deal?</label>
+                            <select name="appt_ratio" id="appt_ratio" required
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg bg-white">
+                                <option value="3" selected>3 appointments (typical)</option>
+                                <option value="2">2 appointments (strong closer)</option>
+                                <option value="4">4 appointments (newer agent)</option>
+                                <option value="5">5 appointments (building skills)</option>
+                            </select>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4 pt-4">
@@ -314,6 +359,8 @@
                                 <input type="hidden" name="appointments_needed" id="appointments_needed_input">
                             </div>
                         </div>
+                        
+                        <p class="helper-text text-center">This isn't your worth. It's your plan.</p>
                     </div>
                 </div>
             </div>
@@ -336,7 +383,7 @@
                         
                         <div class="number-display" id="weekly_number_display">—</div>
                         <p class="text-lg text-gray-600 mt-2">conversations per week</p>
-                        <input type="hidden" name="weekly_conversation_number" id="weekly_number_input">
+                        <input type="hidden" name="weekly_conversations" id="weekly_number_input">
                         
                         <div class="mt-8 bg-teal-50 rounded-xl p-5 border border-teal-100">
                             <p class="text-teal-800">If you hit this number consistently,<br><strong>closings become predictable instead of stressful.</strong></p>
@@ -391,7 +438,7 @@
                             </div>
                         </div>
                         
-                        <p class="text-sm text-gray-500 text-center pt-2">If it's not scheduled, it doesn't exist.</p>
+                        <p class="helper-text text-center">If it's not scheduled, it doesn't exist.</p>
                     </div>
                 </div>
             </div>
@@ -423,7 +470,7 @@
                                 <button type="button" onclick="toggleVoice(this, 'Knowledgeable')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Knowledgeable</button>
                                 <button type="button" onclick="toggleVoice(this, 'Straightforward')" class="voice-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Straightforward</button>
                             </div>
-                            <input type="text" name="voice_feels_like" id="voice_input" placeholder="Or type your own..."
+                            <input type="text" name="voice_feels_like" id="voice_input" required placeholder="Or type your own..."
                                 class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
                         </div>
                         
@@ -437,16 +484,16 @@
                                 <button type="button" onclick="toggleFeel(this, 'Empowered')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Empowered</button>
                                 <button type="button" onclick="toggleFeel(this, 'Not Pressured')" class="feel-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 transition">Not Pressured</button>
                             </div>
-                            <input type="text" name="clients_feel" id="feel_input" placeholder="Or type your own..."
+                            <input type="text" name="clients_feel" id="feel_input" required placeholder="Or type your own..."
                                 class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
                         </div>
                         
                         <div class="pt-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Brand DNA Statement</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Your Brand DNA Statement <span class="text-teal-600">(auto-generated below)</span></label>
                             <textarea name="brand_dna_statement" id="brand_dna" rows="3" required
-                                placeholder="I help [who] decide [what] with a voice that feels [how] so clients feel [outcome]"
+                                placeholder="This will auto-fill as you complete the fields above..."
                                 class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
-                            <p class="text-sm text-gray-500 mt-2">This is Version One. It will evolve as you do.</p>
+                            <p class="helper-text mt-2">This is Version One. Edit it to make it yours.</p>
                         </div>
                     </div>
                 </div>
@@ -476,7 +523,7 @@
                         
                         <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
                             <label class="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" name="ignore_distractions" value="yes" required
+                                <input type="checkbox" name="ignore_distractions" id="ignore_checkbox" value="yes" required
                                     class="mt-1 w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
                                 <span class="text-gray-700">
                                     <strong>For the next 30 days, I will ignore new ideas unless they support this focus.</strong>
@@ -503,7 +550,7 @@
                         </div>
                     </div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-2">You're Locked In</h2>
-                    <p class="text-gray-600 mb-6">Your 2026 Operating Plan is saved.</p>
+                    <p class="text-gray-600 mb-6">Your 2026 Operating Plan is ready.</p>
                     
                     <div class="bg-gray-900 rounded-xl p-6 mb-6">
                         <p class="text-gray-400 text-sm uppercase tracking-wide">Your Calm Number</p>
@@ -517,16 +564,29 @@
                         <p class="text-gray-700">30-Day Focus: <span id="final_focus" class="font-medium">—</span></p>
                     </div>
                     
+                    <!-- THE MAIN EVENT: COPYABLE AI PROMPT -->
+                    <div class="text-left mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="font-medium text-gray-800 text-sm uppercase tracking-wide">Your Brand DNA — Copy for AI</p>
+                            <button type="button" onclick="copyToClipboard()" 
+                                id="copy-btn"
+                                class="copy-btn bg-teal-500 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                                📋 Copy to Clipboard
+                            </button>
+                        </div>
+                        <div class="copy-box rounded-xl p-5 text-gray-300 overflow-auto max-h-96">
+                            <pre id="ai-prompt-text" class="whitespace-pre-wrap text-sm"></pre>
+                        </div>
+                    </div>
+                    
                     <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-                        <p class="text-amber-800 font-medium">Screenshot this page.</p>
+                        <p class="text-amber-800 font-medium">📸 Screenshot this page.</p>
                         <p class="text-amber-700 text-sm">This is your operating plan — not motivation.</p>
                     </div>
                     
                     <div class="ceo-line rounded-xl p-4">
                         <p class="text-white">"2026 doesn't care about your intention.<br>It responds to your actions."</p>
                     </div>
-                    
-                    <p class="text-gray-400 mt-6 text-sm">Your Brand DNA is saved and will power your content.</p>
                 </div>
             </div>
             
@@ -542,7 +602,7 @@
                 </button>
                 <button type="submit" id="submit-btn" 
                     class="btn-primary px-8 py-3 text-white rounded-xl font-medium ml-auto hidden">
-                    Submit My Plan →
+                    See My Plan →
                 </button>
             </div>
         </form>
@@ -556,6 +616,7 @@
     <script>
         let currentStep = 1;
         const totalSteps = 10;
+        let formData = {};
         
         function updateProgress() {
             const progress = (currentStep / totalSteps) * 100;
@@ -567,7 +628,6 @@
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.querySelector(`[data-step="${step}"]`).classList.add('active');
             
-            // Show/hide nav buttons
             document.getElementById('prev-btn').classList.toggle('hidden', step === 1);
             document.getElementById('next-btn').classList.toggle('hidden', step === 10 || step === 11);
             document.getElementById('submit-btn').classList.toggle('hidden', step !== 10);
@@ -577,10 +637,47 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
+        // Validation - can't skip without completing required fields
+        function validateCurrentStep() {
+            const stepEl = document.querySelector(`[data-step="${currentStep}"]`);
+            const requiredFields = stepEl.querySelectorAll('[required]');
+            let isValid = true;
+            let firstInvalid = null;
+            
+            requiredFields.forEach(field => {
+                field.classList.remove('error', 'error-shake');
+                
+                if (field.type === 'checkbox') {
+                    if (!field.checked) {
+                        field.parentElement.parentElement.classList.add('error-shake');
+                        isValid = false;
+                        if (!firstInvalid) firstInvalid = field;
+                    }
+                } else if (!field.value || !field.value.trim()) {
+                    field.classList.add('error', 'error-shake');
+                    isValid = false;
+                    if (!firstInvalid) firstInvalid = field;
+                }
+            });
+            
+            if (firstInvalid) {
+                firstInvalid.focus();
+            }
+            
+            return isValid;
+        }
+        
         function nextStep() {
+            if (!validateCurrentStep()) return;
+            
             if (currentStep < 11) {
                 currentStep++;
                 showStep(currentStep);
+                
+                // Calculate numbers when entering step 7
+                if (currentStep === 7) {
+                    calculateNumbers();
+                }
             }
         }
         
@@ -591,13 +688,15 @@
             }
         }
         
+        // Math calculations
         function calculateNumbers() {
             const income = parseFloat(document.getElementById('income_goal').value) || 0;
             const commission = parseFloat(document.getElementById('avg_commission').value) || 0;
+            const ratio = parseInt(document.getElementById('appt_ratio').value) || 3;
             
             if (income && commission) {
                 const deals = Math.ceil(income / commission);
-                const appointments = deals * 3;
+                const appointments = deals * ratio;
                 const weekly = Math.ceil((appointments / 52) * 7);
                 
                 document.getElementById('deals_needed').textContent = deals;
@@ -611,12 +710,19 @@
             }
         }
         
+        // Listen for changes on math inputs
+        document.getElementById('income_goal').addEventListener('input', calculateNumbers);
+        document.getElementById('avg_commission').addEventListener('input', calculateNumbers);
+        document.getElementById('appt_ratio').addEventListener('change', calculateNumbers);
+        
         function selectDecision(btn, value) {
             document.querySelectorAll('.decision-btn').forEach(b => {
                 b.classList.remove('border-teal-500', 'bg-teal-50');
             });
             btn.classList.add('border-teal-500', 'bg-teal-50');
-            document.querySelector('[name="what_decision"]').value = value;
+            if (value) {
+                document.querySelector('[name="what_decision"]').value = value;
+            }
         }
         
         let selectedVoices = [];
@@ -630,6 +736,7 @@
                 selectedVoices.push(value);
             }
             document.getElementById('voice_input').value = selectedVoices.join(', ');
+            autoBuildBrandDNA();
         }
         
         let selectedFeels = [];
@@ -643,26 +750,127 @@
                 selectedFeels.push(value);
             }
             document.getElementById('feel_input').value = selectedFeels.join(', ');
+            autoBuildBrandDNA();
+        }
+        
+        // Auto-build Brand DNA statement
+        function autoBuildBrandDNA() {
+            const who = (document.querySelector('[name="who_i_serve"]')?.value || '').trim();
+            const decision = (document.querySelector('[name="what_decision"]')?.value || '').trim();
+            const voice = (document.getElementById('voice_input')?.value || '').trim();
+            const feel = (document.getElementById('feel_input')?.value || '').trim();
+            
+            if (!who && !decision && !voice && !feel) return;
+            
+            let draft = 'I help ';
+            draft += who || '[who you serve]';
+            draft += ' decide ';
+            draft += decision ? decision.toLowerCase() : '[what decision]';
+            draft += ' with a voice that feels ';
+            draft += voice ? voice.toLowerCase() : '[your voice]';
+            draft += ', so clients feel ';
+            draft += feel ? feel.toLowerCase() : '[how they feel]';
+            draft += '.';
+            
+            const dnaEl = document.getElementById('brand_dna');
+            const currentVal = dnaEl.value.trim();
+            
+            // Only auto-fill if empty or still has placeholder text
+            if (!currentVal || currentVal.includes('[who') || currentVal.includes('[what') || currentVal.startsWith('I help ')) {
+                dnaEl.value = draft;
+            }
+        }
+        
+        // Listen for changes to auto-build DNA
+        document.addEventListener('input', (e) => {
+            const names = ['who_i_serve', 'what_decision', 'voice_feels_like', 'clients_feel'];
+            if (names.includes(e.target.name)) {
+                autoBuildBrandDNA();
+            }
+        });
+        
+        // Copy to clipboard
+        function copyToClipboard() {
+            const text = document.getElementById('ai-prompt-text').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = '✅ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy to Clipboard';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
         }
         
         // Form submission
-        document.getElementById('fanatical-form').addEventListener('submit', async function(e) {
+        document.getElementById('fanatical-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
+            if (!validateCurrentStep()) return;
+            
+            const fd = new FormData(this);
+            formData = Object.fromEntries(fd);
             
             // Update final screen
             document.getElementById('final_ceo_hour').textContent = 
-                `${data.ceo_hour_day}s at ${data.ceo_hour_time}`;
-            document.getElementById('final_focus').textContent = data.thirty_day_focus;
+                `${formData.ceo_hour_day} at ${formData.ceo_hour_time}`;
+            document.getElementById('final_focus').textContent = formData.thirty_day_focus;
+            
+            // Build the AI prompt - THIS IS WHAT THEY TAKE HOME
+            const aiPrompt = `===========================================
+MY BRAND DNA — PASTE THIS INTO ANY AI
+===========================================
+
+ABOUT ME:
+Name: ${formData.name}
+
+WHO I SERVE:
+${formData.who_i_serve}
+
+WHAT DECISION I HELP THEM MAKE:
+${formData.what_decision}
+
+WHO I'M NOT FOR:
+${formData.who_not_for}
+
+MY VOICE FEELS LIKE:
+${formData.voice_feels_like}
+
+CLIENTS FEEL:
+${formData.clients_feel}
+
+MY BRAND DNA STATEMENT:
+${formData.brand_dna_statement}
+
+===========================================
+HOW TO USE THIS WITH AI
+===========================================
+
+Paste everything above into ChatGPT, Claude, or any AI.
+Then add your request:
+
+EXAMPLES:
+
+"Write a Facebook post about [topic] in my voice."
+
+"Write an email to a first-time homebuyer who's nervous about the process."
+
+"Write a bio for my website that sounds like me."
+
+"Write 5 Instagram captions about [topic] that match my brand."
+
+"Help me respond to this client message in my voice: [paste message]"
+
+===========================================
+REMEMBER: AI writes the words. YOU bring the soul.
+===========================================`;
+            
+            document.getElementById('ai-prompt-text').textContent = aiPrompt;
             
             // Show success
             currentStep = 11;
             showStep(11);
-            
-            // TODO: Send to Airtable via webhook or API
-            console.log('Form data:', data);
         });
     </script>
 </body>
