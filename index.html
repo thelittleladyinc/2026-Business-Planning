@@ -144,6 +144,55 @@
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
+        
+        /* Custom range slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 212, 170, 0.4);
+            transition: transform 0.2s ease;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 212, 170, 0.4);
+        }
+        
+        /* Toggle button styles */
+        .notfor-btn.border-red-400,
+        .refuse-btn.border-red-400,
+        .avoid-btn.border-red-400 {
+            background-color: #fef2f2 !important;
+            border-color: #f87171 !important;
+            color: #b91c1c !important;
+        }
+        
+        .vis-btn.border-teal-500 {
+            background-color: #f0fdfa !important;
+            border-color: #00d4aa !important;
+            color: #0d9488 !important;
+        }
     </style>
 </head>
 <body class="min-h-screen py-8 px-4">
@@ -288,12 +337,21 @@
                     <div class="text-center mb-6">
                         <p class="step-badge text-teal-600 mb-4">Boundaries</p>
                         <h2 class="text-2xl font-bold text-gray-900">Who Are You NOT For?</h2>
-                        <p class="text-gray-600 mt-2">This is relief, not rejection.</p>
+                        <p class="text-gray-600 mt-2">This is relief, not rejection. Select all that apply.</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button type="button" onclick="toggleNotFor(this, 'Investors wanting quick flips')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Investors wanting quick flips</button>
+                        <button type="button" onclick="toggleNotFor(this, 'People who want to be pressured')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">People who want to be pressured</button>
+                        <button type="button" onclick="toggleNotFor(this, 'Bargain hunters only focused on price')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Bargain hunters only on price</button>
+                        <button type="button" onclick="toggleNotFor(this, 'Those who won\'t communicate')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Those who won't communicate</button>
+                        <button type="button" onclick="toggleNotFor(this, 'People expecting miracles overnight')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Expecting miracles overnight</button>
+                        <button type="button" onclick="toggleNotFor(this, 'Tire-kickers with no timeline')" class="notfor-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Tire-kickers with no timeline</button>
                     </div>
                     
                     <div>
-                        <textarea name="who_not_for" rows="3" required
-                            placeholder="Example: Investors looking for quick flips, people who want to be pressured into decisions..."
+                        <textarea name="who_not_for" id="who_not_for_input" rows="2" required
+                            placeholder="Add your own or edit above selections..."
                             class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
                         <p class="helper-text mt-2">Saying no to some means saying yes to the right ones.</p>
                     </div>
@@ -338,13 +396,17 @@
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Appointments to close 1 deal?</label>
-                            <select name="appt_ratio" id="appt_ratio" required
-                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg bg-white">
-                                <option value="3" selected>3 appointments (typical)</option>
-                                <option value="2">2 appointments (strong closer)</option>
-                                <option value="4">4 appointments (newer agent)</option>
-                                <option value="5">5 appointments (building skills)</option>
-                            </select>
+                            <div class="flex items-center gap-4">
+                                <input type="range" name="appt_ratio" id="appt_ratio" min="2" max="6" value="3" 
+                                    class="flex-1 h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-500"
+                                    style="accent-color: #00d4aa;">
+                                <span id="ratio_display" class="text-3xl font-bold text-teal-600 w-12 text-center">3</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-400 mt-1 px-1">
+                                <span>Strong closer</span>
+                                <span>Typical</span>
+                                <span>Building</span>
+                            </div>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4 pt-4">
@@ -410,10 +472,20 @@
                     
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">How will you stay visible?</label>
-                            <textarea name="visibility_commitment" rows="2" required
-                                placeholder="Example: Post 3x per week, host monthly buyer workshop..."
-                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg resize-none"></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">How will you stay visible? (Select all that apply)</label>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <button type="button" onclick="toggleVisibility(this, 'Post on social media')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Social media posts</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Email my database')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Email database</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Host workshops or webinars')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Workshops/Webinars</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Create video content')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Video content</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Open houses')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Open houses</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Community events')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Community events</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Networking/coffee meetings')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Networking</button>
+                                <button type="button" onclick="toggleVisibility(this, 'Door knocking/farming')" class="vis-btn px-4 py-2 border-2 border-gray-200 rounded-full text-sm hover:border-teal-500 hover:bg-teal-50 transition">Door knocking</button>
+                            </div>
+                            <textarea name="visibility_commitment" id="visibility_input" rows="2" required
+                                placeholder="Add specifics: how often, what platforms..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none resize-none"></textarea>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4">
@@ -443,8 +515,96 @@
                 </div>
             </div>
             
-            <!-- Step 9: Brand DNA -->
+            <!-- Step 9: Beliefs & Reputation -->
             <div class="step" data-step="9">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"Your beliefs filter your clients before you ever speak."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Beliefs & Reputation</p>
+                        <h2 class="text-2xl font-bold text-gray-900">What You Stand For</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">What do you believe about real estate that your ideal client needs to hear?</label>
+                            <textarea name="what_i_believe" rows="2" required
+                                placeholder="Example: I believe buying a home should feel informed and calm — not pressured or rushed."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none resize-none"></textarea>
+                            <p class="helper-text mt-1">This is your client-facing belief, not your life philosophy.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">What do you refuse to do, even if it costs you a deal?</label>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <button type="button" onclick="toggleRefuse(this, 'Pressure people into decisions')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Pressure people</button>
+                                <button type="button" onclick="toggleRefuse(this, 'Chase clients who aren\'t ready')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Chase clients</button>
+                                <button type="button" onclick="toggleRefuse(this, 'Sugarcoat the market')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Sugarcoat the market</button>
+                                <button type="button" onclick="toggleRefuse(this, 'Work with disrespectful people')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Work with disrespect</button>
+                                <button type="button" onclick="toggleRefuse(this, 'Sacrifice my integrity for a deal')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Sacrifice integrity</button>
+                                <button type="button" onclick="toggleRefuse(this, 'Overpromise to win business')" class="refuse-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Overpromise</button>
+                            </div>
+                            <textarea name="what_i_refuse" id="refuse_input" rows="2" required
+                                placeholder="Add your own boundaries..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none resize-none"></textarea>
+                            <p class="helper-text mt-1">This teaches AI what NOT to say. Critical for your brand.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">What are 2-3 phrases you say all the time?</label>
+                            <textarea name="go_to_phrases" rows="2" required
+                                placeholder='Example: "Here\'s the real story." / "Let\'s slow this down." / "This is where strategy matters."'
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none resize-none"></textarea>
+                            <p class="helper-text mt-1">This is how AI starts to sound like YOU fast.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">How do you naturally invite people to take the next step?</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="cta_style" value="Soft" required class="text-teal-600">
+                                    <div>
+                                        <span class="font-medium text-sm">Soft</span>
+                                        <span class="block text-xs text-gray-500">DM me, no pressure</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="cta_style" value="Direct" class="text-teal-600">
+                                    <div>
+                                        <span class="font-medium text-sm">Direct</span>
+                                        <span class="block text-xs text-gray-500">Book a call now</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="cta_style" value="Educational" class="text-teal-600">
+                                    <div>
+                                        <span class="font-medium text-sm">Educational</span>
+                                        <span class="block text-xs text-gray-500">Learn more first</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <p class="helper-text mt-2">This controls AI's closing energy so it doesn't feel salesy.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If someone referred you, what would you want them to say?</label>
+                            <input type="text" name="known_for" required
+                                placeholder='Example: "She\'s calm and knows her stuff." / "He made it so easy."'
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                            <p class="helper-text mt-1">This becomes the north star of all your messaging.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 10: Brand DNA -->
+            <div class="step" data-step="10">
                 <div class="ceo-reminder rounded-lg p-3 mb-4">
                     <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
                 </div>
@@ -504,7 +664,17 @@
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Words or phrases I'd NEVER use</label>
-                            <input type="text" name="words_avoid" required placeholder="Example: Act now, Hot market, Don't miss out, Urgent..."
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <button type="button" onclick="toggleAvoid(this, 'Act now!')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Act now!</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Hot market')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Hot market</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Don\'t miss out')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Don't miss out</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Urgent')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Urgent</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Dream home')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Dream home</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Limited time')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Limited time</button>
+                                <button type="button" onclick="toggleAvoid(this, 'You NEED to...')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">You NEED to...</button>
+                                <button type="button" onclick="toggleAvoid(this, 'Crush it')" class="avoid-btn px-3 py-1.5 border-2 border-gray-200 rounded-full text-sm hover:border-red-400 hover:bg-red-50 transition">Crush it</button>
+                            </div>
+                            <input type="text" name="words_avoid" id="avoid_input" required placeholder="Add your own..."
                                 class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
                             <p class="helper-text mt-1">Helps AI avoid things that don't sound like you.</p>
                         </div>
@@ -520,8 +690,101 @@
                 </div>
             </div>
             
-            <!-- Step 10: Commitment -->
-            <div class="step" data-step="10">
+            <!-- Step 11: Clone Context -->
+            <div class="step" data-step="11">
+                <div class="ceo-reminder rounded-lg p-3 mb-4">
+                    <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
+                </div>
+                
+                <div class="ceo-line rounded-xl p-4 mb-6">
+                    <p class="text-white text-center">"AI needs context to sound like you, not a template."</p>
+                </div>
+                
+                <div class="card rounded-2xl shadow-2xl p-8">
+                    <div class="text-center mb-6">
+                        <p class="step-badge text-teal-600 mb-4">Clone Context</p>
+                        <h2 class="text-2xl font-bold text-gray-900">Teach AI How You Work</h2>
+                        <p class="text-gray-600 mt-2">Quick context that makes AI output sharper</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">What's your primary business focus right now?</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="business_focus" value="More listings" required class="text-teal-600">
+                                    <span class="text-sm">More listings</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="business_focus" value="More buyers" class="text-teal-600">
+                                    <span class="text-sm">More buyers</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="business_focus" value="More referrals" class="text-teal-600">
+                                    <span class="text-sm">More referrals</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-500 transition">
+                                    <input type="radio" name="business_focus" value="More relocation leads" class="text-teal-600">
+                                    <span class="text-sm">Relocation leads</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Where do most of your conversations come from?</label>
+                            <select name="lead_source" required class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none bg-white">
+                                <option value="">Select...</option>
+                                <option value="Database / sphere">Database / sphere</option>
+                                <option value="Social media">Social media</option>
+                                <option value="Open houses">Open houses</option>
+                                <option value="Paid ads">Paid ads</option>
+                                <option value="Referrals">Referrals</option>
+                                <option value="Cold outreach">Cold outreach</option>
+                            </select>
+                            <p class="helper-text mt-1">AI adjusts tone based on warm vs cold audiences.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">How do most of your clients make decisions?</label>
+                            <select name="decision_style" required class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none bg-white">
+                                <option value="">Select...</option>
+                                <option value="Emotion first, logic second">Emotion first, logic second</option>
+                                <option value="Logic first, emotion second">Logic first, emotion second</option>
+                                <option value="They need reassurance">They need reassurance</option>
+                                <option value="They need data">They need data</option>
+                                <option value="They need time">They need time</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">When people first reach out, what are they most afraid of?</label>
+                            <input type="text" name="client_fear" required
+                                placeholder="Example: Being pressured, overpaying, making the wrong move, looking stupid..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                            <p class="helper-text mt-1">Fear drives language. AI needs to know what to calm first.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">What do you find yourself explaining over and over?</label>
+                            <input type="text" name="repeat_explanation" required
+                                placeholder="Example: Pricing reality, timing myths, why strategy matters more than speed..."
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                            <p class="helper-text mt-1">This becomes content themes and talking points.</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Why do you personally care about this work? (One line)</label>
+                            <input type="text" name="why_i_care" required
+                                placeholder='Example: "I hate seeing people feel pressured." / "I like simplifying complicated things."'
+                                class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none">
+                            <p class="helper-text mt-1">This stops AI from sounding like marketing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 12: Commitment -->
+            <div class="step" data-step="12">
                 <div class="ceo-reminder rounded-lg p-3 mb-4">
                     <p class="text-sm text-teal-700"><strong>CEO Reminder:</strong> You're not filling out a form. You're designing how your business runs without you.</p>
                 </div>
@@ -561,7 +824,7 @@
             </div>
             
             <!-- Success Screen -->
-            <div class="step" data-step="11">
+            <div class="step" data-step="13">
                 <div class="card rounded-2xl shadow-2xl p-8 text-center celebration">
                     <div class="mb-4">
                         <div class="w-16 h-16 bg-teal-500 rounded-full mx-auto flex items-center justify-center">
@@ -636,7 +899,7 @@
     
     <script>
         let currentStep = 1;
-        const totalSteps = 10;
+        const totalSteps = 12;
         let formData = {};
         
         function updateProgress() {
@@ -650,9 +913,9 @@
             document.querySelector(`[data-step="${step}"]`).classList.add('active');
             
             document.getElementById('prev-btn').classList.toggle('hidden', step === 1);
-            document.getElementById('next-btn').classList.toggle('hidden', step === 10 || step === 11);
-            document.getElementById('submit-btn').classList.toggle('hidden', step !== 10);
-            document.getElementById('nav-buttons').classList.toggle('hidden', step === 11);
+            document.getElementById('next-btn').classList.toggle('hidden', step === 12 || step === 13);
+            document.getElementById('submit-btn').classList.toggle('hidden', step !== 12);
+            document.getElementById('nav-buttons').classList.toggle('hidden', step === 13);
             
             updateProgress();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -691,7 +954,7 @@
         function nextStep() {
             if (!validateCurrentStep()) return;
             
-            if (currentStep < 11) {
+            if (currentStep < 13) {
                 currentStep++;
                 showStep(currentStep);
                 
@@ -734,7 +997,67 @@
         // Listen for changes on math inputs
         document.getElementById('income_goal').addEventListener('input', calculateNumbers);
         document.getElementById('avg_commission').addEventListener('input', calculateNumbers);
-        document.getElementById('appt_ratio').addEventListener('change', calculateNumbers);
+        document.getElementById('appt_ratio').addEventListener('input', function() {
+            document.getElementById('ratio_display').textContent = this.value;
+            calculateNumbers();
+        });
+        
+        // Toggle functions for multi-select buttons
+        let selectedNotFor = [];
+        function toggleNotFor(btn, value) {
+            btn.classList.toggle('border-red-400');
+            btn.classList.toggle('bg-red-50');
+            btn.classList.toggle('text-red-700');
+            
+            if (selectedNotFor.includes(value)) {
+                selectedNotFor = selectedNotFor.filter(v => v !== value);
+            } else {
+                selectedNotFor.push(value);
+            }
+            document.getElementById('who_not_for_input').value = selectedNotFor.join(', ');
+        }
+        
+        let selectedVisibility = [];
+        function toggleVisibility(btn, value) {
+            btn.classList.toggle('border-teal-500');
+            btn.classList.toggle('bg-teal-50');
+            btn.classList.toggle('text-teal-700');
+            
+            if (selectedVisibility.includes(value)) {
+                selectedVisibility = selectedVisibility.filter(v => v !== value);
+            } else {
+                selectedVisibility.push(value);
+            }
+            document.getElementById('visibility_input').value = selectedVisibility.join(', ');
+        }
+        
+        let selectedRefuse = [];
+        function toggleRefuse(btn, value) {
+            btn.classList.toggle('border-red-400');
+            btn.classList.toggle('bg-red-50');
+            btn.classList.toggle('text-red-700');
+            
+            if (selectedRefuse.includes(value)) {
+                selectedRefuse = selectedRefuse.filter(v => v !== value);
+            } else {
+                selectedRefuse.push(value);
+            }
+            document.getElementById('refuse_input').value = selectedRefuse.join('. ');
+        }
+        
+        let selectedAvoid = [];
+        function toggleAvoid(btn, value) {
+            btn.classList.toggle('border-red-400');
+            btn.classList.toggle('bg-red-50');
+            btn.classList.toggle('text-red-700');
+            
+            if (selectedAvoid.includes(value)) {
+                selectedAvoid = selectedAvoid.filter(v => v !== value);
+            } else {
+                selectedAvoid.push(value);
+            }
+            document.getElementById('avoid_input').value = selectedAvoid.join(', ');
+        }
         
         function selectDecision(btn, value) {
             document.querySelectorAll('.decision-btn').forEach(b => {
@@ -863,6 +1186,21 @@ ${formData.who_not_for}
 WHAT MAKES ME DIFFERENT:
 ${formData.differentiator}
 
+WHAT I BELIEVE:
+${formData.what_i_believe}
+
+WHAT I REFUSE TO DO:
+${formData.what_i_refuse}
+
+MY GO-TO PHRASES:
+${formData.go_to_phrases}
+
+MY CALL-TO-ACTION STYLE:
+${formData.cta_style}
+
+WHAT I WANT TO BE KNOWN FOR:
+${formData.known_for}
+
 MY VOICE FEELS LIKE:
 ${formData.voice_feels_like}
 
@@ -874,6 +1212,28 @@ ${formData.words_avoid}
 
 MY BRAND DNA STATEMENT:
 ${formData.brand_dna_statement}
+
+===========================================
+CLONE CONTEXT
+===========================================
+
+PRIMARY BUSINESS FOCUS:
+${formData.business_focus}
+
+PRIMARY LEAD SOURCE:
+${formData.lead_source}
+
+HOW MY CLIENTS DECIDE:
+${formData.decision_style}
+
+WHAT CLIENTS ARE AFRAID OF:
+${formData.client_fear}
+
+WHAT I EXPLAIN OVER AND OVER:
+${formData.repeat_explanation}
+
+WHY I CARE:
+${formData.why_i_care}
 
 ===========================================
 HOW TO USE THIS WITH AI
@@ -901,8 +1261,8 @@ REMEMBER: AI writes the words. YOU bring the soul.
             document.getElementById('ai-prompt-text').textContent = aiPrompt;
             
             // Show success
-            currentStep = 11;
-            showStep(11);
+            currentStep = 13;
+            showStep(13);
         });
     </script>
 </body>
