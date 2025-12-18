@@ -2658,7 +2658,8 @@
         }
 
         function getWeekLabel(weekKey) {
-            const d = new Date(weekKey);
+            const parts = weekKey.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
             return 'Week of ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
@@ -3154,7 +3155,9 @@
         }
 
         function changeWeek(delta) {
-            const current = new Date(state.currentWeek);
+            // Parse date properly to avoid timezone issues
+            const parts = state.currentWeek.split('-');
+            const current = new Date(parts[0], parts[1] - 1, parts[2]);
             current.setDate(current.getDate() + (delta * 7));
             state.currentWeek = getWeekKey(current);
             saveState();
@@ -3289,15 +3292,22 @@
                             <span class="stage-count">${deals.length}</span>
                         </div>
                         <div class="stage-deals">
-                            ${deals.map(deal => `
+                            ${deals.map(deal => {
+                                let closeDateDisplay = '—';
+                                if (deal.closeDate) {
+                                    const parts = deal.closeDate.split('-');
+                                    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                                    closeDateDisplay = d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+                                }
+                                return `
                                 <div class="deal-card" onclick="editDeal('${deal.id}')">
                                     <div class="deal-name">${deal.type === 'buyer' ? '🏠' : '📋'} ${deal.name}</div>
                                     <div class="deal-meta">
-                                        <span>${deal.closeDate ? new Date(deal.closeDate).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : '—'}</span>
+                                        <span>${closeDateDisplay}</span>
                                         <span class="deal-gci">${deal.gci || '—'}</span>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                         <button class="stage-add" onclick="openDealModal('${stage.id}')">+ Add Deal</button>
                     </div>
