@@ -2646,15 +2646,17 @@
             activity: {}, // Daily conversation tracking: { 'YYYY-MM-DD': count }
             currentActivityMonth: new Date().toISOString().slice(0, 7) // YYYY-MM
         };
-
-        // BUG FIX: Week starts on MONDAY now
-        function getWeekKey(date) {
-            const d = new Date(date);
-            d.setHours(0, 0, 0, 0);
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
-            d.setDate(diff);
-            return d.toISOString().split('T')[0];
+       // BUG FIX: Week starts on MONDAY now
+function getWeekKey(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const dayOfMonth = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${dayOfMonth}`;
         }
 
         function getWeekLabel(weekKey) {
