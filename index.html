@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- 
-    THE CLOSING LANE™ — 2026 Edition v2.1
+    THE CLOSING LANE™ — 2026 Edition v2.2
     5-Tab Consolidated Build
     Consistency beats intensity. The week is the atomic unit.
 -->
@@ -316,6 +316,125 @@
         @keyframes pulse-glow {
             0%, 100% { box-shadow: 0 0 10px rgba(247, 147, 30, 0.4); }
             50% { box-shadow: 0 0 20px rgba(247, 147, 30, 0.7); }
+        }
+        
+        /* Achievement Badges */
+        .badges-section {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .badges-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+        
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .badge-item.locked {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+        
+        .badge-item.unlocked {
+            border-color: #f7931e;
+            background: linear-gradient(135deg, rgba(247, 147, 30, 0.1), rgba(255, 107, 53, 0.1));
+        }
+        
+        .badge-item.unlocked.new {
+            animation: badge-unlock 0.6s ease;
+        }
+        
+        @keyframes badge-unlock {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        
+        .badge-item.locked .badge-name {
+            color: var(--text-muted);
+        }
+        
+        .badge-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #f7931e;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+        
+        .badge-toast-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce-in 0.5s ease;
+        }
+        
+        @keyframes bounce-in {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        .badge-toast-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f7931e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-toast-desc {
+            color: #aaa;
+            font-size: 0.875rem;
         }
         
         /* ==================== CONFETTI ==================== */
@@ -1785,6 +1904,13 @@
     <!-- Confetti Container -->
     <div id="confettiContainer" class="confetti-container"></div>
     
+    <!-- Badge Unlock Toast -->
+    <div id="badgeToast" class="badge-toast">
+        <div id="badgeToastIcon" class="badge-toast-icon"></div>
+        <div id="badgeToastTitle" class="badge-toast-title"></div>
+        <div id="badgeToastDesc" class="badge-toast-desc"></div>
+    </div>
+    
     <!-- Notification -->
     <div id="notification" class="notification">Saved!</div>
     
@@ -1903,7 +2029,7 @@
                 <div class="status-grid">
                     <div class="status-card accent">
                         <div class="status-card-value" id="calmNumber">2</div>
-                        <div class="status-card-label">Calm Number</div>
+                        <div class="status-card-label">Daily Driver</div>
                     </div>
                     <div class="status-card">
                         <div class="status-card-value" id="thisWeekConvos">0</div>
@@ -1941,7 +2067,7 @@
                             <span class="quick-ref-value" id="qrLane">-</span>
                         </div>
                         <div class="quick-ref-item">
-                            <span class="quick-ref-label">Calm Number</span>
+                            <span class="quick-ref-label">Daily Driver</span>
                             <span class="quick-ref-value" id="qrCalm">-</span>
                         </div>
                         <div class="quick-ref-item">
@@ -2048,6 +2174,16 @@
                     <p id="postLogDescription" style="margin-bottom: 1rem; color: var(--text-secondary);">Grab a template to keep the momentum going:</p>
                     <div class="prompt-categories" id="postLogCategories">
                         <!-- Populated by JS based on activity type -->
+                    </div>
+                </div>
+                
+                <!-- Achievement Badges -->
+                <div class="badges-section">
+                    <div class="badges-header">
+                        🏆 Achievements
+                    </div>
+                    <div class="badges-grid" id="badgesGrid">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
                 
@@ -2604,7 +2740,7 @@
             laneSelectedDate: null,
             lastActiveWeek: null,
             ui: { hidePostLogPrompt: false },
-            version: '2.1',
+            version: '2.2',
         };
         
         let editingDealId = null;
@@ -2634,7 +2770,7 @@
         
         // State migration for backwards compatibility
         function migrateState(loadedState) {
-            const currentVersion = '2.1';
+            const currentVersion = '2.2';
             
             // Ensure all required objects exist with correct types
             const defaults = {
@@ -2647,6 +2783,7 @@
                 activities: {},
                 standards: {},
                 buildProgress: {},
+                badges: [],
                 currentWeek: 1,
                 streak: 0,
                 weeksCompleted: 0,
@@ -2746,7 +2883,7 @@
         // ==================== STANDARDS DATA ====================
         const STANDARDS = [
             { id: 1, title: "I know my lane", description: "I have chosen ONE lane and committed to it for at least 90 days." },
-            { id: 2, title: "I know my numbers", description: "I know my Calm Number and work backwards from my income goal." },
+            { id: 2, title: "I know my numbers", description: "I know my Daily Driver and work backwards from my income goal." },
             { id: 3, title: "I have a plan", description: "I have set up my CEO Hour and protected time for lead generation." },
             { id: 4, title: "I show up visible", description: "I take visibility actions consistently — people know I'm in real estate." },
             { id: 5, title: "I follow up systematically", description: "I don't let leads slip through the cracks. I have a follow-up system." },
@@ -2781,7 +2918,7 @@
         
         // ==================== HELP FAQ ====================
         const HELP_FAQ = [
-            { q: "What is the Calm Number?", a: "Your Calm Number is the minimum daily conversations needed to hit your income goal. It's calculated from your goals backward. Hit this number daily (or weekly total) and you're on track." },
+            { q: "What is the Daily Driver?", a: "Your Daily Driver is the minimum daily conversations needed to hit your income goal. It's calculated from your goals backward. Hit this number daily (or weekly total) and you're on track. Remember: your Daily Driver is not a ceiling to exceed — it's the minimum effective dose for momentum." },
             { q: "How do I change my lane?", a: "Click on your lane in the Command tab to open the lane selector. We recommend committing to one lane for 90 days before switching." },
             { q: "What counts as a conversation?", a: "A real, two-way exchange about real estate or life. Not a text that got no reply. Not a social media like. Actual dialogue." },
             { q: "How do I export my data?", a: "Click the export button in the header to download a JSON backup of all your data. You can import this later if needed." },
@@ -2944,12 +3081,14 @@
             renderBuildSteps();
             renderStandards();
             renderHelp();
+            renderBadges();
             checkWelcomeBack();
             checkStreak();
             checkBackupReminder();
             checkFirstTimeUser();
             checkLaneCommitment();
             checkMissedWeeks();
+            checkBadges();
             
             // Check for saved theme
             if (localStorage.getItem('theme') === 'light') {
@@ -3255,7 +3394,7 @@
                         <ul style="margin: 0; padding-left: 1.25rem; color: var(--text-secondary);">`;
                     
                     activities.forEach(a => {
-                        content += `<li>${a.notes || 'No notes'}</li>`;
+                        content += `<li>${escapeHtml(a.notes) || 'No notes'}</li>`;
                     });
                     
                     content += '</ul></div>';
@@ -3618,13 +3757,20 @@
                         deal.closedCelebrated = true;
                         saveState();
                         triggerConfetti();
+                        checkBadges();
                     }
                 }
             }
         }
         
         // ==================== ACTIVITY & CALENDAR ====================
+        let lastLogTime = 0;
         function quickLog(evt, type) {
+            // Debounce rapid clicks (500ms)
+            const now = Date.now();
+            if (now - lastLogTime < 500) return;
+            lastLogTime = now;
+            
             // Highlight the button
             document.querySelectorAll('.quick-log-btn').forEach(btn => btn.classList.remove('active'));
             if (evt && evt.currentTarget) {
@@ -3648,6 +3794,7 @@
                 renderCalendar();
                 updateCommandCenter();
                 showPostLogPrompt(type);
+                checkBadges();
             }
         }
         
@@ -3656,6 +3803,12 @@
             const notes = document.getElementById('activity_notes').value;
             const dateInput = document.getElementById('activityDate').value;
             const activityDate = dateInput || localDateStr();
+            
+            // Don't log 0 conversations unless there are notes
+            if (count === 0 && !notes.trim()) {
+                showNotification('Enter a count or notes to log');
+                return;
+            }
             
             if (!state.activities[activityDate]) {
                 state.activities[activityDate] = { types: [], conversations: 0, notes: '' };
@@ -3679,6 +3832,7 @@
             renderCalendar();
             updateCommandCenter();
             showPostLogPrompt('conversation');
+            checkBadges();
         }
         
         function closeActivityModal() {
@@ -4147,6 +4301,7 @@
                 renderWeeklyReview();
                 updateCommandCenter();
                 checkStreak();
+                checkBadges();
             } else {
                 showNotification('Week already recorded.');
             }
@@ -4380,7 +4535,7 @@
                                    onchange="saveBuildStep(10, 'avg_gci', this.value)">
                         </div>
                         <div class="ceo-line" style="margin: 1rem 0;">
-                            Based on your numbers, your Calm Number is: <strong>${calculateCalmNumber()}</strong> conversations per day
+                            Based on your numbers, your Daily Driver is: <strong>${calculateCalmNumber()}</strong> conversations per day
                         </div>
                         <button class="btn btn-primary" onclick="completeBuildStep(10)">Continue</button>
                     `;
@@ -4545,6 +4700,7 @@
             
             renderBuildSteps();
             updateCommandCenter();
+            checkBadges();
             
             if (stepId === 14) {
                 // Quiet confirmation — confetti reserved for real outcomes
@@ -4599,6 +4755,160 @@
         
         let confettiCooldown = false;
         
+        // ==================== ACHIEVEMENT BADGES ====================
+        const BADGES = [
+            { 
+                id: 'first_week', 
+                icon: '📅', 
+                name: 'First Week', 
+                desc: 'Complete your first week of tracking',
+                check: (s) => s.weeksCompleted >= 1
+            },
+            { 
+                id: 'streak_7', 
+                icon: '🔥', 
+                name: '7-Day Streak', 
+                desc: 'Log activity 7 days in a row',
+                check: (s) => calculateStreak(s) >= 7
+            },
+            { 
+                id: 'streak_30', 
+                icon: '💎', 
+                name: '30-Day Streak', 
+                desc: 'Log activity 30 days in a row',
+                check: (s) => calculateStreak(s) >= 30
+            },
+            { 
+                id: 'first_deal', 
+                icon: '🎉', 
+                name: 'First Close', 
+                desc: 'Close your first deal',
+                check: (s) => s.deals.filter(d => d.stage === 'closed').length >= 1
+            },
+            { 
+                id: 'deal_machine', 
+                icon: '🏆', 
+                name: 'Deal Machine', 
+                desc: 'Close 5 deals',
+                check: (s) => s.deals.filter(d => d.stage === 'closed').length >= 5
+            },
+            { 
+                id: 'lane_committed', 
+                icon: '🛣️', 
+                name: 'Lane Locked', 
+                desc: 'Stay in your lane for 30 days',
+                check: (s) => {
+                    if (!s.plan.laneStartDate) return false;
+                    const start = new Date(s.plan.laneStartDate);
+                    const now = new Date();
+                    const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                    return days >= 30 && s.plan.lane;
+                }
+            },
+            { 
+                id: 'daily_driver_5', 
+                icon: '🚗', 
+                name: 'Road Warrior', 
+                desc: 'Hit your Daily Driver 5 days in a row',
+                check: (s) => {
+                    const workdays = s.plan.workdays_per_week || 5;
+                    const dailyTarget = (s.plan.weekly_conversations || 15) / workdays;
+                    let streak = 0;
+                    const today = new Date();
+                    for (let i = 0; i < 30; i++) {
+                        const checkDate = new Date(today);
+                        checkDate.setDate(checkDate.getDate() - i);
+                        const dateStr = localDateStr(checkDate);
+                        const activity = s.activities[dateStr];
+                        if (activity && activity.conversations >= dailyTarget) {
+                            streak++;
+                        } else if (i > 0) {
+                            break;
+                        }
+                    }
+                    return streak >= 5;
+                }
+            },
+            { 
+                id: 'build_complete', 
+                icon: '🏗️', 
+                name: 'Foundation Set', 
+                desc: 'Complete all 14 Build Steps',
+                check: (s) => {
+                    const completed = Object.values(s.buildProgress || {}).filter(v => v).length;
+                    return completed >= 14;
+                }
+            }
+        ];
+        
+        function calculateStreak(s) {
+            let streak = 0;
+            const today = new Date();
+            for (let i = 0; i < 365; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateStr = localDateStr(checkDate);
+                const activity = s.activities[dateStr];
+                if (activity && (activity.types.length > 0 || activity.conversations > 0)) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            return streak;
+        }
+        
+        function checkBadges() {
+            if (!state.badges) state.badges = [];
+            
+            let newBadge = null;
+            BADGES.forEach(badge => {
+                if (!state.badges.includes(badge.id) && badge.check(state)) {
+                    state.badges.push(badge.id);
+                    newBadge = badge;
+                }
+            });
+            
+            if (newBadge) {
+                saveState();
+                showBadgeUnlock(newBadge);
+                triggerConfetti();
+            }
+            
+            renderBadges();
+        }
+        
+        function renderBadges() {
+            const grid = document.getElementById('badgesGrid');
+            if (!grid) return;
+            
+            if (!state.badges) state.badges = [];
+            
+            grid.innerHTML = BADGES.map(badge => {
+                const unlocked = state.badges.includes(badge.id);
+                return `
+                    <div class="badge-item ${unlocked ? 'unlocked' : 'locked'}" title="${badge.desc}">
+                        <div class="badge-icon">${unlocked ? badge.icon : '🔒'}</div>
+                        <div class="badge-name">${badge.name}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function showBadgeUnlock(badge) {
+            const toast = document.getElementById('badgeToast');
+            document.getElementById('badgeToastIcon').textContent = badge.icon;
+            document.getElementById('badgeToastTitle').textContent = `${badge.name} Unlocked!`;
+            document.getElementById('badgeToastDesc').textContent = badge.desc;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // ==================== CONFETTI ====================
         function triggerConfetti() {
             // Prevent confetti spam if triggered multiple times quickly
             if (confettiCooldown) return;
@@ -4822,7 +5132,7 @@
     
     <!-- Footer -->
     <footer style="text-align: center; padding: 2rem 1rem; margin-top: 3rem; border-top: 1px solid var(--card-border);">
-        <p style="font-size: 0.75rem; color: var(--text-muted);">THE CLOSING LANE™ — 2026 Edition v2.1</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">THE CLOSING LANE™ — 2026 Edition v2.2</p>
         <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.75rem;">
             Predictable income is built by repeatable weeks.<br>
             © 2025 THE CLOSING LANE™. All rights reserved. Single-user license.
