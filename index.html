@@ -1514,6 +1514,7 @@
                     <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackup(event)">
                     <button class="export-btn" onclick="showShareModal()" title="Share Accountability Report">📤</button>
                     <button class="export-btn" onclick="exportToPDF()" title="Export to PDF">📄</button>
+                    <button class="export-btn" onclick="confirmStartOver()" title="Start Over (Reset All Data)">🔄</button>
                     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
                 </div>
             </div>
@@ -2719,6 +2720,26 @@
         }
 
         // ==================== BACKUP & RESTORE ====================
+        function confirmStartOver() {
+            const firstConfirm = confirm('⚠️ START OVER?\n\nThis will permanently delete ALL your data:\n• Profile & settings\n• Pipeline deals\n• Activity history\n• Weekly scorecards\n• Everything\n\nYou will return to the beginning.\n\nAre you sure?');
+            
+            if (firstConfirm) {
+                const secondConfirm = confirm('FINAL WARNING\n\nType "RESET" in the next prompt to confirm.\n\nClick OK to continue or Cancel to abort.');
+                
+                if (secondConfirm) {
+                    const typed = prompt('Type RESET to confirm:');
+                    if (typed && typed.toUpperCase() === 'RESET') {
+                        localStorage.removeItem('laneState');
+                        localStorage.removeItem('firstTime');
+                        showNotification('All data cleared. Reloading...');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        showNotification('Reset cancelled');
+                    }
+                }
+            }
+        }
+
         function exportBackup() {
             const backup = {
                 version: 'v6',
