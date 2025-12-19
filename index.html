@@ -1876,7 +1876,7 @@
                         <span class="lane-icon" id="currentLaneIcon">●</span>
                         <div>
                             <div class="lane-name" id="currentLaneName">Select Your Lane</div>
-                            <div class="lane-change" id="laneStatus">Click to select →</div>
+                            <div class="lane-change" id="laneStatus" title="Your 90-day focus commitment. Stay in one lane to build momentum.">Click to select →</div>
                         </div>
                     </div>
                 </div>
@@ -3021,9 +3021,9 @@
                         const daysRemaining = Math.max(0, 90 - daysIn);
                         
                         if (daysRemaining > 0) {
-                            laneStatus.textContent = `Day ${daysIn + 1} of 90 • ${daysRemaining} days remaining`;
+                            laneStatus.textContent = `🔒 Day ${daysIn + 1} of 90-day focus`;
                         } else {
-                            laneStatus.textContent = `90 days complete • Commitment honored`;
+                            laneStatus.textContent = `✓ 90-day commitment complete!`;
                         }
                     } else {
                         laneStatus.textContent = 'Click to change →';
@@ -4788,7 +4788,7 @@
             // Save to state
             state.plan.name = name;
             state.plan.lane = selectedSetupLane;
-            state.laneSelectedDate = new Date().toISOString();
+            state.plan.laneStartDate = new Date().toISOString();
             state.profile.incomeGoal = income;
             state.profile.avgGci = gci;
             state.quickSetupComplete = true;
